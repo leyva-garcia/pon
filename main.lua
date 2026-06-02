@@ -80,6 +80,10 @@ function movePlayer(dt)
     --move player paddle to the left
     if love.keyboard.isDown("a") then 
         player.x = player.x - player.speed * dt
+      
+    end
+    if player.x == 0 then
+        player.x = 0
     end
 
     if love.keyboard.isDown("w") then
@@ -113,7 +117,7 @@ function moveEnemy(dt)
     end
 
     if love.keyboard.isDown("left") then
-        enemy.x = enemy.x - enemy.speed * dt
+        enemy.x = enemy.x -  enemy.speed * dt
     end
 
     if love.keyboard.isDown("right") then

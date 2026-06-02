@@ -72,6 +72,16 @@ end
 
 --Left paddle
 function movePlayer(dt)
+    --move player paddle to the right
+    if love.keyboard.isDown("d") then 
+        player.x = player.x + player.speed * dt
+    end
+
+    --move player paddle to the left
+    if love.keyboard.isDown("a") then 
+        player.x = player.x - player.speed * dt
+    end
+
     if love.keyboard.isDown("w") then
         player.y = player.y - player.speed * dt
     end

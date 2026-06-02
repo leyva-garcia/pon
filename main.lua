@@ -112,6 +112,14 @@ function moveEnemy(dt)
         enemy.y = enemy.y + enemy.speed * dt
     end
 
+    if love.keyboard.isDown("left") then
+        enemy.x = enemy.x - enemy.speed * dt
+    end
+
+    if love.keyboard.isDown("right") then
+        enemy.x = enemy.x + enemy.speed * dt
+    end
+
      --top boundery right paddle
     if enemy.y < 0 then
         enemy.y = 0

@@ -37,6 +37,7 @@ function love.draw()
     love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
     love.graphics.rectangle("fill", enemy.x, enemy.y, enemy.width, enemy.height)
     love.graphics.circle("fill", ball.x, ball.y, ball.radius)
+    love.graphics.rectangle("fill", WINDOW_WIDTH / 2, 0, 2, 600)
 end
 
 function love.update(dt)
@@ -82,10 +83,13 @@ function movePlayer(dt)
         player.x = player.x - player.speed * dt
       
     end
-    if player.x == 0 then
+    if player.x < 0 then
         player.x = 0
     end
 
+    if player.x > WINDOW_WIDTH / 4 then
+        player.x = WINDOW_WIDTH / 4
+    end
     if love.keyboard.isDown("w") then
         player.y = player.y - player.speed * dt
     end
@@ -127,6 +131,14 @@ function moveEnemy(dt)
      --top boundery right paddle
     if enemy.y < 0 then
         enemy.y = 0
+    end
+
+    if enemy.x < WINDOW_WIDTH - 250 then
+        enemy.x = WINDOW_WIDTH -250
+    end
+
+    if enemy.x > WINDOW_WIDTH - enemy.width then
+        enemy.x = WINDOW_WIDTH - enemy.width
     end
 
     --bottom boundery right paddle

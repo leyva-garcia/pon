@@ -6,8 +6,8 @@ local player = {
     y = WINDOW_HEIGHT / 2,
     width = 10,
     height = 100,
-    speed = 300
-
+    speed = 300,
+    score = 0
 }
 
 local enemy = {
@@ -15,7 +15,8 @@ local enemy = {
     y = WINDOW_HEIGHT / 2,
     width = 10,
     height = 100,
-    speed = 300
+    speed = 300,
+    score = 0
 }
 
 local ball = {
@@ -26,18 +27,27 @@ local ball = {
     speedY = 0
 }
 
+local scoreFont
 
 function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT)
     math.randomseed(os.time())
+
+    --love.graphics.setDefaultFilter("nearest", "nearest")
+    scoreFont = love.graphics.newFont(40)
 end
 
 
 function love.draw() 
+    love.graphics.setFont(scoreFont)
+
     love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
     love.graphics.rectangle("fill", enemy.x, enemy.y, enemy.width, enemy.height)
     love.graphics.circle("fill", ball.x, ball.y, ball.radius)
     love.graphics.rectangle("fill", WINDOW_WIDTH / 2, 0, 2, 600)
+
+    love.graphics.print(player.score, WINDOW_WIDTH / 4, 30 )
+    love.graphics.print(enemy.score, WINDOW_WIDTH * 3 / 4, 30 )
 end
 
 function love.update(dt)
@@ -46,6 +56,15 @@ function love.update(dt)
     movePlayer(dt)
     moveEnemy(dt)
     checkWallCollission()
+    if checkPaddleCollision(ball, player) then
+        ball.speedX = -ball.speedX
+    end
+
+    if checkPaddleCollision(ball, enemy) then
+        ball.speedX = -ball.speedX
+    end
+
+    checkScore()
 
 end
 
@@ -160,7 +179,14 @@ function checkPaddleCollision(ball, paddle)
     local paddleTop = paddle.y
     local paddleBottom = paddle.y + paddle.height
 
-    
+    if ballRight >= paddleLeft and
+       ballLeft <= paddleRight and
+       ballBottom >= paddleTop and
+       ballTop <= paddleBottom then
+        return true
+    end 
+
+    return false   
 
 end    
 
@@ -171,12 +197,32 @@ function love.keypressed(key)
 
     if key == "return" then
         if math.random(2) == 1 then
-            ball.speedX = 300
+            ball.speedX = 200
         else 
-            ball.speedX = -300  
+            ball.speedX = -200  
         end
 
-        ball.speedY = math.random(-300, 300)
+        ball.speedY = math.random(-200, 200)
     end
 
 end
+
+function checkScore()
+    --enemy scores if ball leaves left side
+    if ball.x < 0 then
+        enemy.score = enemy.score + 1
+        resetBall()
+    end
+    --player scores if ball leaves right side
+    if ball.x > WINDOW_WIDTH then
+        player.score = player.score + 1
+        resetBall()
+    end
+end    
+
+function resetBall()
+    ball.x = WINDOW_WIDTH / 2
+    ball.y = WINDOW_HEIGHT / 2
+    ball.speedX = 0
+    ball.speedY = 0
+end    

@@ -56,12 +56,15 @@ function love.update(dt)
     movePlayer(dt)
     moveEnemy(dt)
     checkWallCollission()
+
     if checkPaddleCollision(ball, player) then
-        ball.speedX = -ball.speedX
+        ball.x = player.x + player.width + ball.radius
+        ball.speedX = math.abs(ball.speedX)
     end
 
     if checkPaddleCollision(ball, enemy) then
-        ball.speedX = -ball.speedX
+        ball.x = enemy.x - ball.radius
+        ball.speedX = -math.abs(ball.speedX)
     end
 
     checkScore()
